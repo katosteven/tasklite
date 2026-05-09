@@ -1,0 +1,79 @@
+{% extends "core/base.html" %}
+{% block title %}{{ object.title }}{% endblock %}
+{% block content %}
+<div class="section-head">
+  <div>
+    <h1>{{ object.title }}</h1>
+    <p class="muted">
+      Owner: <strong>{{ object.owner.username }}</strong>
+      · <span class="badge priority-{{ object.priority }}">{{ object.get_priority_display }}</span>
+      · Due: {{ object.due_date|default:"—" }}
+      · {{ object.percent_complete }}% complete
+      {% if object.is_overdue %} · <span class="warn">overdue</span>{% endif %}
+    </p>
+  </div>
+  {% if object.owner == user %}
+    <div class="row-actions">
+      <a class="btn secondary" href="{% url 'project_edit' object.pk %}">Edit</a>
+      <a class="btn warn" href="{% url 'project_delete' object.pk %}">Delete</a>
+    </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Description</h2>
+  <p>{{ object.description|linebreaksbr|default:"(no description)" }}</p>
+</div>
+
+<div class="card">
+  <h2>Members</h2>
+  <ul class="clean">
+    <li><strong>{{ object.owner.username }}</strong> <span class="muted">(owner)</span></li>
+    {% for m in object.members.all %}<li>{{ m.username }}</li>{% endfor %}
+  </ul>
+</div>
+
+<div class="card">
+  <div class="section-head">
+    <h2>Tasks</h2>
+    <a class="btn gold" href="{% url 'task_create' object.pk %}">+ Add task</a>
+  </div>
+  {% if object.tasks.all %}
+    <ul class="clean">
+      {% for t in object.tasks.all %}
+        <li>
+          {% if t.completed %}
+            <span class="badge done">done</span>
+            <s><a href="{% url 'task_detail' t.pk %}">{{ t.title }}</a></s>
+          {% else %}
+            <span class="badge open">open</span>
+            <a href="{% url 'task_detail' t.pk %}">{{ t.title }}</a>
+          {% endif %}
+          {% if t.due_date %}<span class="muted"> · due {{ t.due_date }}</span>{% endif %}
+          {% if t.is_overdue %} <span class="badge priority-3">overdue</span>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}<p class="muted">No tasks yet.</p>{% endif %}
+</div>
+
+<div class="card">
+  <div class="section-head">
+    <h2>Attachments</h2>
+    <a class="btn secondary" href="{% url 'attachment_create' object.pk %}">Upload file</a>
+  </div>
+  {% if object.attachments.all %}
+    <ul class="clean">
+      {% for a in object.attachments.all %}
+        <li>
+          <a href="{% url 'attachment_download' a.pk %}">{{ a.original_name }}</a>
+          <span class="muted">— {{ a.uploaded_by.username }}, {{ a.uploaded_at|date }}</span>
+          {% if a.uploaded_by == user or object.owner == user %}
+            · <a href="{% url 'attachment_delete' a.pk %}">delete</a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}<p class="muted">No files uploaded.</p>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "core/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="section-head">
+  <div>
+    <h1>Welcome back, {{ user.username }}</h1>
+    <p class="muted">Here's a snapshot of your work.</p>
+  </div>
+  <a class="btn gold" href="{% url 'project_create' %}">+ New project</a>
+</div>
+
+<section class="cards">
+  <div class="stat"><span class="num">{{ project_count }}</span><span class="label">Your projects</span></div>
+  <div class="stat"><span class="num">{{ open_task_count }}</span><span class="label">Open tasks</span></div>
+  <div class="stat"><span class="num">{{ done_task_count }}</span><span class="label">Completed tasks</span></div>
+  <div class="stat"><span class="num">{{ overdue_count }}</span><span class="label">Overdue</span></div>
+</section>
+
+<div class="card">
+  <div class="section-head">
+    <h2>Recent projects</h2>
+    <a href="{% url 'project_list' %}">View all &rarr;</a>
+  </div>
+  {% if projects %}
+    <ul class="clean">
+      {% for p in projects %}
+        <li>
+          <strong><a href="{% url 'project_detail' p.pk %}">{{ p.title }}</a></strong>
+          <span class="badge priority-{{ p.priority }}">{{ p.get_priority_display }}</span>
+          <span class="muted"> · {{ p.percent_complete }}% complete · {{ p.tasks.count }} tasks</span>
+          {% if p.is_overdue %}<span class="warn"> · overdue</span>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">No projects yet. <a href="{% url 'project_create' %}">Create your first one</a>.</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>My open tasks</h2>
+  {% if my_open_tasks %}
+    <ul class="clean">
+      {% for t in my_open_tasks %}
+        <li>
+          <a href="{% url 'task_detail' t.pk %}">{{ t.title }}</a>
+          <span class="muted"> · </span>
+          <a href="{% url 'project_detail' t.project_id %}">{{ t.project.title }}</a>
+          {% if t.due_date %}<span class="muted"> · due {{ t.due_date }}</span>{% endif %}
+          {% if t.is_overdue %} <span class="badge priority-3">overdue</span>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">Nothing assigned to you. Enjoy the calm.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h1>Delete note &ldquo;{{ object.title }}&rdquo;?</h1>
+<form method="post">{% csrf_token %}
+  <button type="submit">Yes, delete</button>
+  <a href="{% url 'task_detail' object.task_id %}">Cancel</a>
+</form>
+{% endblock %}

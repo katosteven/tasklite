@@ -1,0 +1,23 @@
+{% extends "core/base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="card wide">
+  <div class="profile-head">
+    {% if user.profile.avatar %}
+      <img src="{{ user.profile.avatar.url }}" alt="avatar" class="avatar">
+    {% else %}
+      <div class="avatar placeholder">{{ user.username|slice:":1"|upper }}</div>
+    {% endif %}
+    <div>
+      <h1 class="heading-tight">{{ user.username }}</h1>
+      <p class="muted">{{ user.email }}</p>
+    </div>
+  </div>
+  <h2>Bio</h2>
+  <p>{{ user.profile.bio|linebreaksbr|default:"(no bio yet)" }}</p>
+  <div class="row-actions">
+    <a class="btn gold" href="{% url 'profile_edit' %}">Edit profile</a>
+    <a class="btn secondary" href="{% url 'password_change' %}">Change password</a>
+  </div>
+</div>
+{% endblock %}

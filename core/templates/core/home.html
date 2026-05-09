@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Plan, track and ship work — <span class="accent">securely</span>.</h1>
+  <p>Tasksite is a clean, security-first project &amp; task manager for small teams.
+     Create projects, assign tasks, share notes, attach files and stay on top of
+     deadlines — all behind hardened authentication and a strict Content Security Policy.</p>
+  <div class="cta-row">
+    <a class="btn gold" href="{% url 'register' %}">Create your account</a>
+    <a class="btn ghost-light" href="{% url 'login' %}">Log in</a>
+    <a class="btn ghost-gold" href="{% url 'about' %}">Learn more</a>
+  </div>
+</section>
+
+<section class="feature-grid">
+  <div class="card">
+    <div class="icon">P</div>
+    <h3>Projects with members</h3>
+    <p class="muted">Invite teammates, set priorities and due dates, and watch progress
+       update automatically as tasks complete.</p>
+  </div>
+  <div class="card">
+    <div class="icon">T</div>
+    <h3>Tasks &amp; notes</h3>
+    <p class="muted">Break work into tasks, assign collaborators and capture decisions
+       inline with threaded notes on every task.</p>
+  </div>
+  <div class="card">
+    <div class="icon">F</div>
+    <h3>Safe file sharing</h3>
+    <p class="muted">Attach documents to projects. Downloads are streamed only to
+       authorised members — never world-readable.</p>
+  </div>
+  <div class="card">
+    <div class="icon">🔒</div>
+    <h3>Security by default</h3>
+    <p class="muted">Strict CSP, HSTS-ready, hardened cookies, PBKDF2 hashing,
+       per-object access control and CSRF on every form.</p>
+  </div>
+</section>
+{% endblock %}

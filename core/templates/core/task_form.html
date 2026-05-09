@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% block title %}{% if object %}Edit{% else %}New{% endif %} task{% endblock %}
+{% block content %}
+<h1>{% if object %}Edit{% else %}New{% endif %} task</h1>
+<div class="card wide">
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <div class="row-actions">
+      <button class="btn gold" type="submit">Save</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

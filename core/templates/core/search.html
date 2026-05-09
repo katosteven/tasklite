@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+<h1>Search</h1>
+<form method="get">
+  <input type="search" name="q" value="{{ q }}" placeholder="Search projects and tasks">
+  <button type="submit">Search</button>
+</form>
+
+{% if q %}
+  <h2>Projects ({{ projects|length }})</h2>
+  <ul>{% for p in projects %}
+    <li><a href="{% url 'project_detail' p.pk %}">{{ p.title }}</a></li>
+  {% empty %}<li>(none)</li>{% endfor %}</ul>
+
+  <h2>Tasks ({{ tasks|length }})</h2>
+  <ul>{% for t in tasks %}
+    <li>
+      <a href="{% url 'task_detail' t.pk %}">{{ t.title }}</a>
+      &mdash; <a href="{% url 'project_detail' t.project_id %}">{{ t.project.title }}</a>
+    </li>
+  {% empty %}<li>(none)</li>{% endfor %}</ul>
+{% endif %}
+{% endblock %}

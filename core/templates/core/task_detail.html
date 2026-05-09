@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+{% block title %}{{ object.title }}{% endblock %}
+{% block content %}
+<div class="section-head">
+  <div>
+    <h1>{{ object.title }}</h1>
+    <p class="muted">
+      Project: <a href="{% url 'project_detail' object.project_id %}">{{ object.project.title }}</a>
+      · Due: {{ object.due_date|default:"—" }}
+      · Status:
+      {% if object.completed %}
+        <span class="badge done">complete</span>
+      {% else %}
+        <span class="badge open">open</span>
+      {% endif %}
+      {% if object.is_overdue %} <span class="badge priority-3">overdue</span>{% endif %}
+    </p>
+  </div>
+  <div class="row-actions">
+    <form method="post" action="{% url 'task_toggle' object.pk %}" class="inline">
+      {% csrf_token %}
+      <button class="btn gold" type="submit">
+        {% if object.completed %}Reopen{% else %}Mark complete{% endif %}
+      </button>
+    </form>
+    <a class="btn secondary" href="{% url 'task_edit' object.pk %}">Edit</a>
+    <a class="btn warn" href="{% url 'task_delete' object.pk %}">Delete</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Description</h2>
+  <p>{{ object.body|linebreaksbr|default:"(no description)" }}</p>
+</div>
+
+<div class="card">
+  <h2>Assignees</h2>
+  <ul class="clean">
+    {% for u in object.assignees.all %}<li>{{ u.username }}</li>{% empty %}<li class="muted">(none)</li>{% endfor %}
+  </ul>
+</div>
+
+<div class="card">
+  <div class="section-head">
+    <h2>Notes</h2>
+    <a class="btn gold" href="{% url 'note_create' object.pk %}">+ Add note</a>
+  </div>
+  {% for n in object.notes.all %}
+    <article class="note">
+      <h3>{{ n.title }}</h3>
+      <p class="muted">{{ n.author.username }} · {{ n.created_at|date:"Y-m-d H:i" }}</p>
+      <p>{{ n.body|linebreaksbr }}</p>
+      {% if n.author == user or object.project.owner == user %}
+        <p>
+          <a href="{% url 'note_edit' n.pk %}">edit</a>
+          · <a href="{% url 'note_delete' n.pk %}">delete</a>
+        </p>
+      {% endif %}
+    </article>
+  {% empty %}<p class="muted">No notes yet.</p>{% endfor %}
+</div>
+{% endblock %}

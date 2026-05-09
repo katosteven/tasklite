@@ -1,0 +1,12 @@
+{% extends "core/base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<h1>Create your account</h1>
+<div class="card medium">
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <div class="row-actions"><button class="btn gold" type="submit">Register</button></div>
+  </form>
+  <p class="muted">Already have an account? <a href="{% url 'login' %}">Log in</a>.</p>
+</div>
+{% endblock %}

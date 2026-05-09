@@ -1,0 +1,7 @@
+Django>=5.2,<5.3
+python-decouple>=3.8
+django-csp>=4.0
+whitenoise>=6.6
+Pillow>=10.3
+waitress>=3.0
+

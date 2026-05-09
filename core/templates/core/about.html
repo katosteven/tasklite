@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>About <span class="accent">Tasksite</span> </h1>
+  <p>A minimal, security-first task &amp; project manager for small teams &mdash;
+     designed as a clean reference implementation of a modern Django 5 application.</p>
+</section>
+
+<div class="card">
+  <h2>What is Tasksite? and Where this started</h2>
+  <p>Tasksite is a lightweight collaboration tool that helps small teams plan
+     projects, break them down into tasks, and capture context as the work
+     progresses. 
+     <br><br>
+     This project began with django.nV - a deliberately vulnerable Django web application created by NetSPI as a security training tool. It ships with real-world vulnerabilities baked in: OS command injection via file uploads, raw SQL queries open to injection, missing CSRF tokens, absent HTTP security headers, hardcoded secrets, and more. 
+     <br>As part of an MCS 7201 Computer Systems Security assessment, django.nV was scanned with Bandit (static analysis) and OWASP ZAP (dynamic analysis), revealing 20 issues across all severity levels. Tasksite is the result: a complete, secure rewrite of the same application, addressing every finding and applying secure-by-default Django practices throughout.</p>
+
+  <h2>What you can do</h2>
+  <ul class="clean">
+    <li><strong>Manage projects.</strong> Create projects with a description, priority and optional due date. Add teammates as members.</li>
+    <li><strong>Track tasks.</strong> Add tasks under any project, assign them to members, mark them complete, and see progress roll up to the project.</li>
+    <li><strong>Capture decisions.</strong> Post titled notes on any task to keep a clear history of why work happened.</li>
+    <li><strong>Share files safely.</strong> Upload attachments to a project; downloads are streamed only to authorised members.</li>
+    <li><strong>Find anything fast.</strong> Search projects and tasks, scoped to what your account can see.</li>
+    <li><strong>Personal dashboard.</strong> See your most recent projects and your own open tasks at a glance.</li>
+    <li><strong>Account self-service.</strong> Register, log in, change your password, reset by email and edit your profile (bio + avatar).</li>
+  </ul>
+
+  <h2>Built with security first</h2>
+  <ul class="clean">
+    <li>Django 5 with the latest security patches; secrets driven by <code>.env</code> &mdash; never committed.</li>
+    <li>PBKDF2 password hashing and Django's full password-validator stack (min length 10, no common passwords, etc.).</li>
+    <li>CSRF protection on every form; sessions and CSRF cookies are <code>HttpOnly</code> + <code>SameSite=Strict</code> + <code>Secure</code> in production.</li>
+    <li>Strict Content-Security-Policy with <em>no</em> <code>unsafe-inline</code> &mdash; every directive is set explicitly.</li>
+    <li>HSTS, <code>X-Frame-Options: DENY</code>, <code>X-Content-Type-Options: nosniff</code>, same-origin referrer policy.</li>
+    <li>Per-object access control: every queryset is scoped to <em>owner OR member</em>; deletes are owner-only.</li>
+    <li>Uploads go through Django's file storage layer with a 5&nbsp;MB cap; downloads are gated by membership.</li>
+    <li>Static assets served via WhiteNoise so security headers apply to every response.</li>
+  </ul>
+
+
+{% endblock %}

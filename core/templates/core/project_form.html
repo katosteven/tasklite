@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+{% block title %}{% if object %}Edit{% else %}New{% endif %} project{% endblock %}
+{% block content %}
+<h1>{% if object %}Edit{% else %}New{% endif %} project</h1>
+<div class="card wide">
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <div class="row-actions">
+      <button class="btn gold" type="submit">Save</button>
+      <a class="btn secondary" href="{% if object %}{% url 'project_detail' object.pk %}{% else %}{% url 'project_list' %}{% endif %}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
